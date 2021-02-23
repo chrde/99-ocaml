@@ -1,0 +1,19 @@
+[
+  {
+    "name": "tests (w)",
+    "command": "dune runtest -w",
+    "default": true
+  },
+  {
+    "name": "exec",
+    "command": "dune exec ./main.exe"
+  },
+  {
+    "name": "utop (lib)",
+    "command": "dune utop lib"
+  },
+  {
+    "name": "install deps",
+    "command": "dune external-lib-deps --missing -w @runtest"
+  }
+]
