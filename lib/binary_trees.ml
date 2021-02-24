@@ -167,3 +167,51 @@ let%test _ =
       , Node (2, Node (4, Empty, Empty), Node (5, Empty, Empty))
       , Node (3, Node (6, Empty, Empty), Empty) )
 ;;
+
+(* 64 *)
+let layout_binary_tree1 t =
+  let rec iter t x y =
+    match t with
+    | Empty -> Empty, x
+    | Node (v, l, r) ->
+      let new_l, l_x = iter l x (y + 1) in
+      let new_r, r_x = iter r (l_x + 1) (y + 1) in
+      Node ((v, l_x, y), new_l, new_r), r_x
+  in
+  iter t 1 1
+;;
+
+let example_layout_tree =
+  let leaf x = Node (x, Empty, Empty) in
+  Node
+    ( 'n'
+    , Node
+        ( 'k'
+        , Node ('c', leaf 'a', Node ('h', Node ('g', leaf 'e', Empty), Empty))
+        , leaf 'm' )
+    , Node ('u', Node ('p', Empty, Node ('s', leaf 'q', Empty)), Empty) )
+;;
+
+let expected =
+  Node
+    ( ('n', 8, 1)
+    , Node
+        ( ('k', 6, 2)
+        , Node
+            ( ('c', 2, 3)
+            , Node (('a', 1, 4), Empty, Empty)
+            , Node
+                ( ('h', 5, 4)
+                , Node (('g', 4, 5), Node (('e', 3, 6), Empty, Empty), Empty)
+                , Empty ) )
+        , Node (('m', 7, 3), Empty, Empty) )
+    , Node
+        ( ('u', 12, 2)
+        , Node
+            ( ('p', 9, 3)
+            , Empty
+            , Node (('s', 11, 4), Node (('q', 10, 5), Empty, Empty), Empty) )
+        , Empty ) )
+;;
+
+let%test _ = layout_binary_tree1 example_layout_tree = (expected, 13)
